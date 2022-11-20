@@ -1,0 +1,175 @@
+﻿@using BlogProj_12_10_22.Models
+@using BlogProj_12_10_22.Services
+@using Microsoft.AspNetCore.Identity
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@using BlogProj_12_10_22.Enums
+
+
+
+@inject UserManager<BlogUser> userManager
+@inject IImageService _imageService
+
+@model IPagedList<Blog>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+
+    @foreach (var blog in Model)
+            {
+        <div class="col-sm-12 col-md-6 col-lg-4 mt-2 card-group ">
+            <div class="card border-dark align-items-center ">
+                        @if(blog.ImageData is not null)
+                {
+                        <img class="card-img-top p-2" style="width:300px; height:150px; " src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType) " />
+                }
+                else
+                {
+                    <img class="card-img-top"/>
+
+                }
+                <div class="card-body text-center">
+
+                    <div class="bg-warning">
+                                <hr class="card-hr" />
+                                <h5 class="card-title">@blog.Name</h5>
+                                <hr class="card-hr" />
+                            </div>
+
+                    <div class="overflow-hidden" style="max-width: 500px; max-height: 100px;">
+                        <p class="card-text cftooltip text-center"
+                                   data-toggle="tooltip"
+                                   data-placement="top"
+                                   title=""
+                                   data-original-title="@blog.Description">@blog.Description</p>
+
+                            </div>
+
+                            <br />
+                            <div class="text-center">
+                                <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="BlogPostsIndex" asp-controller="Posts" asp-route-id="@blog.id">
+                                    Read Posts
+                                </a>
+                            </div>
+
+                            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                            {
+                                <div class="text-center">
+                                    <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Create" asp-controller="Posts" asp-route-id="@blog.id">
+                                        Create Post
+                                    </a>
+                                </div>
+                            }
+
+                            @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                            {
+                                <div class="text-center">
+                                    <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.id">
+                                        Edit Blog
+                                    </a>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+</div>
+
+<hr />
+
+<!-- Add paging controls here -->
+<div class="row">
+    <div class="col">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
+
+<!-- Paged List Core -->
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            }
+
+        )
+    </div>
+</div>
+
+<!-- Footer-->
+<footer class="border-top">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="#!">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#!">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#!">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2022</div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@section Scripts {
+
+    <script>
+        var swalMsg = '@TempData["SweetAlert"]'
+        if (swalMsg != ) {
+            Swal.fire({
+                icon: 'success',
+                title: swalMsg,
+                timer: 2500
+              
+            })
+        }
+
+        $(document).ready(function () {
+            $("p").tooltip();
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

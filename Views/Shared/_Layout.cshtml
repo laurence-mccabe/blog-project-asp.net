@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>@ViewData["Title"] - BlogProj_12_10_22</title>
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="/css/CleanBlogstyles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+            <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Home Page</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+            </button>                     
+
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Index">Blog Index</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Posts" asp-action="Index">Posts Index</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Posts" asp-action="Create">Create Post</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Comments" asp-action="Index">Comments</a></li>
+                    }
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 fst-italic" asp-controller="Home" asp-action="Index">Laurence's IT Blog</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="AboutMe">About Me</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                   
+                    <partial name="_LoginPartial">
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page Header-->
+    <header class="masthead" style="background-image: url(@ViewData["HeaderImage"])">
+        <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                        <h1>@ViewData["MainText"]</h1>
+                        <span class="subheading">@ViewData["SubText"]</span>
+
+                        <form asp-action="SearchIndex" asp-controller="Posts" enctype="multipart/form-data">
+                            <div class="input-group mt-5">
+                                <input type="text" name="SearchTerm" id="SearchTerm" class="form-control" placeholder="Search Term">
+                                <div class="input-group-append">
+                                    <button onclick="AddSearchTerm()" class="btn btn-warning btn-block btn-sm" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - BlogProj_12_10_22 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/js/scripts.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
